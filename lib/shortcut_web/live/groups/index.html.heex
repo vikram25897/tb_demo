@@ -1,0 +1,25 @@
+<.header>
+  Groups
+  <:actions>
+    <.button phx-click="toggle_create_group">New</.button>
+  </:actions>
+</.header>
+<%= for group <- @groups do %>
+  <.group_tile group={group} />
+<% end %>
+<.modal
+  :if={@show_create_dialog}
+  id="create_group"
+  show
+  on_cancel={JS.push("toggle_create_group")}
+>
+  <:title>
+    Create A New Group
+  </:title>
+  <.simple_form for={@form} phx-change="validate" phx-submit="save">
+    <.input field={@form[:title]} label="Group Title" />
+    <:actions>
+      <.button>Save</.button>
+    </:actions>
+  </.simple_form>
+</.modal>

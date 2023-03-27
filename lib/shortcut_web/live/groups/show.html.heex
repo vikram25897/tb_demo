@@ -1,0 +1,27 @@
+<.header>
+  <%= @group.title %>
+  <:actions>
+    <.button phx-click="toggle_create_task">New</.button>
+  </:actions>
+</.header>
+<%= for task <- @group.tasks do %>
+  <.task_tile task={task} />
+<% end %>
+<.modal :if={@show_create_dialog} id="create_task" show on_cancel={JS.push("toggle_create_task")}>
+  <:title>
+    Create A New Task
+  </:title>
+  <.simple_form for={@form} phx-change="validate" phx-submit="save">
+    <.input field={@form[:title]} label="Task Title" />
+    <.input
+      type="select"
+      prompt="Select Dependency"
+      field={@form[:dependency_id]}
+      label="Depends On"
+      options={Enum.map(@group.tasks, fn task -> {task.title, task.id} end)}
+    />
+    <:actions>
+      <.button phx-disable-with="Saving">Save</.button>
+    </:actions>
+  </.simple_form>
+</.modal>
